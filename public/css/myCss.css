@@ -1,0 +1,93 @@
+*{
+	margin:0;
+	padding:0;
+	list-style: none;
+	font-size:.48rem;
+	font-family:"微软雅黑";
+	outline: none;
+}
+.tx-r{
+	text-align: right;
+}
+.hui{
+	color: #999999;
+}
+.blue{
+	color: #0ab1f7;
+}.blue1{
+	color: #00cde6;
+}.white{
+	color: white;
+}.red{
+	color: #ff5000;
+}.green{
+	color: #00d792;
+}.green1{
+	color: #1db63e;
+}.bg-hui{
+	background: #efefef;
+}.bg-white{
+	background: white;
+}
+.no-blod{
+	font-weight: 100;
+}
+.ceshi{
+  border: 1px solid red;
+}
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+a:link {
+text-decoration: none;
+}
+a:visited {
+text-decoration: none;
+}
+a:hover {
+text-decoration: none;
+}
+a:active {
+text-decoration: none;
+}
+.abs{
+  position: absolute;
+}
+.hand{
+  cursor: pointer;
+}
+.none{
+	display: none;
+}
+.bold{
+	font-weight: bold;
+}.rel{
+	position: relative;
+}
+.uc-a1 {
+  -webkit-border-radius: 0.5rem;
+  border-radius: 0.5rem
+}
+.uc-a3 {
+  -webkit-border-radius: 50%;
+  border-radius: 50%
+}
+.uc-a2 {
+  -webkit-border-radius: 1rem;
+  border-radius: 1rem
+}
+.bg-toum{
+	background-color: transparent;
+}
+.tx-c{
+  text-align: center;
+}
+.xf{
+	position: fixed;
+}
+.clearF{/*解决浮动无高*/
+	overflow: hidden;
+}

@@ -1,0 +1,17 @@
+.perOrderList-top{
+	height: 5.91rem;
+}.perOrderList-top-img{
+	height: 5.68rem;
+	width: 100%;
+}.perOrderList-top-toux{
+	top: .5rem;
+	left: 4.26rem;
+	width: 3.5rem;
+	height: 3.5rem;
+	border: .2rem solid #38d9fd;
+}.perOrderList-top-name{
+	font-size: .48rem;
+	width: 100%;
+	line-height: 1.1rem;
+	bottom: .4rem;
+}

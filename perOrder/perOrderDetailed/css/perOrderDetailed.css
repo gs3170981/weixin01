@@ -1,0 +1,13 @@
+/*list*/
+.perOrderDetailed-list{
+	padding: 0 .5rem;
+	line-height: 1.7rem;
+	font-size: .48rem;
+}.perOrderDetailed-list-li{
+	border-bottom: .01rem solid #cccccc;
+}.perOrderDetailed-list-li:last-child{
+	border-bottom: none;
+}.perOrderDetailed-list-det{
+	color: #666666;
+}
+

@@ -1,0 +1,26 @@
+.ticketList{
+	padding: 0 .5rem;
+}.ticketList-li{
+	padding: .5rem 0;
+	border-bottom: .01rem solid #cccccc;
+}.ticketList-li-img{
+	width: 5.20rem;
+	height: 3.70rem;
+}.ticketList-li-det{
+	padding-left: .42rem;
+}.ticketList-li-det-title{
+	height: .86rem;
+	line-height: .86rem;
+}.ticketList-li-det-p{
+	height: 1.74rem;
+	line-height: 1.74rem;
+	font-family: "宋体";
+}.ticketList-li-det-bottom{
+	height: 1.1rem;
+	line-height: 1.1rem;
+}.ticketList-li-det-bottom-money{
+	font-size: .55rem;
+}.ticketList-li-det-bottom-up{
+	background: linear-gradient(to right,#17d5f7,#0ab1f7);
+	width: 3.2rem;
+}

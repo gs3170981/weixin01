@@ -1,0 +1,29 @@
+/*public*/
+.tickSuccess-line{
+	height: .78rem;
+	border-top: .01rem solid #cccccc;
+}
+/*header*/
+.tickSuccess-top{
+	line-height: 3.5rem;
+}.tickSuccess-top-img{
+	height: 1.24rem;
+	width: 1.24rem;
+	margin: .87rem 0 0 3.5rem;
+}.tickSuccess-top-title{
+	font-size: .6rem;
+	margin: -.25rem 0 0 .45rem;
+}
+/*list*/
+.tickSuccess-list{
+	padding: 0 .5rem;
+	line-height: 1.7rem;
+	font-size: .48rem;
+}.tickSuccess-list-li{
+	border-bottom: .01rem solid #cccccc;
+}.tickSuccess-list-li:last-child{
+	border-bottom: none;
+}.tickSuccess-list-det{
+	color: #666666;
+}
+
