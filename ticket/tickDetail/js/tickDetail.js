@@ -10,15 +10,15 @@ $(function(){
 			header:{
 				img:[
 					{
-						src:'../../img/imgDemo.png'
+						src:'../../public/img/imgDemo.png'
 					},{
-						src:'../../img/imgDemo.png'
+						src:'../../public/img/imgDemo.png'
 					},{
-						src:'../../img/imgDemo.png'
+						src:'../../public/img/imgDemo.png'
 					},{
-						src:'../../img/imgDemo.png'
+						src:'../../public/img/imgDemo.png'
 					},{
-						src:'../../img/imgDemo.png'
+						src:'../../public/img/imgDemo.png'
 					}
 				],
 				title:'邛崃景区门票通票',
@@ -93,7 +93,7 @@ $(function(){
 				+"</li>";
 			}
 			$('body').append('<header>'
-				+'<div id="banner" class="tickDetail-top-banner"></div>'
+				+'<div id="banner" class="tickDetail-top-banner clearF bg-hui"></div>'
 				+'<ul class="tickDetail-top-ul">'
 					+'<li class="tickDetail-top-ul-title">'+header.title+'</li>'
 					+'<li class="tickDetail-top-ul-tag hui">'+header.tag+'</li>'
@@ -184,6 +184,7 @@ $(function(){
 				$('#tickDetailAllMoney').text(val*money);
 				$('#tickDetailNumber').text(val);
 			})
+			$("span[name='tickDetailPR']")[1].click();
 		}
 		function getAjax(){
 			$.ajax({

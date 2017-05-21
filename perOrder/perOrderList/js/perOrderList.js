@@ -39,34 +39,71 @@ $(function(){
 				color:'blue'
 			}
 		]
+		$('#perOrderList').append("<h1 class='perOrderList-title'>"+getData.title+"</h1><ul id='perOrderListUl' class='perOrderList-ul'></ul>");
+		var perOrderList=getData.list;
+		if(perOrderList.length==0){
+			$('#perOrderListUl').text('暂无数据');
+			return false;
+		}
 		//数据加载
-		domDeploy(getData);
+		domDeploy(perOrderList);
 		
-		function domDeploy(obj){
-			$('body').append("<ul id='ticketListList' class='ticketList'></ul>")
-			if(obj.length==0){
-				$('#ticketListList').text('暂无数据');
-				return false;
-			}
-			for(var i=0;i<obj.length;i++)
-				$('#ticketListList').append("<li class='ticketList-li clearF'>"
-					+"<img class='ticketList-li-img left' src='"+obj[i].src+"' />"
-					+"<div class='clearF ticketList-li-det'>"
-						+"<h3 class='ticketList-li-det-title'>"+obj[i].title+"</h3>"
-						+"<p class='ticketList-li-det-p hui'>"+obj[i].tag+"</p>"
-						+"<ul class='clearF ticketList-li-det-bottom'>"
-							+"<li class='left bold blue ticketList-li-det-bottom-money'>"
-								+"<span class='no-blod'>￥</span>"+obj[i].money+""
-							+"</li>"
-							+"<li name='ticketListListClick' class='right white ticketList-li-det-bottom-up uc-a2 tx-c'>立即预定</li>"
+		function domDeploy(perOrderList){
+			for(var i=0;i<perOrderList.length;i++){
+				for(var j=0;j<listIs.length;j++)
+					if(perOrderList[i].is==listIs[j].is)
+						break;
+				$('#perOrderListUl').append("<li>"
+					+"<ul class='clearF perOrderList-ul-li-top'>"
+						+"<li class='left'>订单编号: </li>"
+						+"<li class='left'>"+perOrderList[i].number+"</li>"
+						+"<li class='right "+listIs[j].color+"'>"+listIs[j].title+"</li>"
+					+"</ul>"
+					+"<div class='perOrderList-ul-li-mid bg-hui clearF'>"
+						+"<img class='perOrderList-ul-li-mid-img left' src="+perOrderList[i].src+" />"
+						+"<ul>"
+							+"<li class='perOrderList-ul-li-mid-title'>"+perOrderList[i].title+"</li>"
+							+"<li class='perOrderList-ul-li-mid-money'>￥ "+perOrderList[i].money+" <span class='perOrderList-ul-li-mid-several hui'>X "+perOrderList[i].several+"</span></li>"
+							+"<li class='hui perOrderList-ul-li-mid-timer'>"+perOrderList[i].timer+"</li>"
 						+"</ul>"
 					+"</div>"
+					+"<p class='perOrderList-ul-li-bottom clearF tx-r'>共"+perOrderList[i].several+"件商品　合计：<span class='red'>￥"+perOrderList[i].several*perOrderList[i].money+"</span></p>"
+					+"<p class='bg-hui perOrderList-line'></p>"
 				+"</li>");
-			//事件绑定
-			$("li[name='ticketListListClick']").click(function(){
-				console.log(this);
-			})
+			}
 		}
+		//绑定上拉下拉
+	 	$(window).scroll(function(){
+　        		var top = $(this).scrollTop();
+    　　  		var d_h = $(document).height();
+        　　   	var w_h = $(this).height();
+　       	 	if(top + w_h >= d_h){
+                console.log("上拉加载");
+                //ajax
+                //这里要一个if来判断是否为空,则给用户显示没数据了.
+                domDeploy([
+					{
+						number:'201705192231',
+						is:0,//状态码
+						src:'../../public/img/imgDemo.png',
+						title:'景区成人票123123',
+						money:260,
+						several:1,
+						timer:'2016-12-27 11:34'
+					},{
+						number:'201705192231',
+						is:1,//状态码
+						src:'../../public/img/imgDemo.png',
+						title:'景区成人票123123',
+						money:260,
+						several:1,
+						timer:'2016-12-27 11:34'
+					}
+				]);
+         	}else if(top<=0){
+            	console.log("下拉刷新");
+         	}
+      	})
 		function getAjax(){
 			$.ajax({
 				type:"get",

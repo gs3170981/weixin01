@@ -1,3 +1,9 @@
+/*public*/
+.perOrderList-line{
+	height: .78rem;
+	border-top: .01rem solid #cccccc;
+}
+/*header*/
 .perOrderList-top{
 	height: 5.91rem;
 }.perOrderList-top-img{
@@ -14,4 +20,35 @@
 	width: 100%;
 	line-height: 1.1rem;
 	bottom: .4rem;
+}
+/*list*/
+.perOrderList-title{
+	line-height: 1.6rem;
+	padding: 0 .5rem;
+	font-size: .58rem;
+	border-bottom: .01rem solid #cccccc;
+}.perOrderList-ul{
+	font-size: .48rem;
+}.perOrderList-ul-li-top{
+	padding: 0 .5rem;
+	line-height: 1.45rem;
+}.perOrderList-ul-li-mid{
+	padding: .5rem;
+}.perOrderList-ul-li-mid-img{
+	height: 3rem;
+	width: 4rem;
+	margin-right: .34rem;
+}.perOrderList-ul-li-mid-title{
+	line-height: .7rem;
+}.perOrderList-ul-li-mid-money{
+	line-height: 1.6rem;
+}.perOrderList-ul-li-mid-several{
+	font-size: .42rem;
+}.perOrderList-ul-li-mid-timer{
+	font-size: .36rem;
+	line-height: .7rem;
+}.perOrderList-ul-li-bottom{
+	line-height: 1.4rem;
+	font-size: .42rem;
+	padding: 0 .5rem;
 }
