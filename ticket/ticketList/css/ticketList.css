@@ -1,3 +1,4 @@
+/*ticketList*/
 .ticketList{
 	padding: 0 .5rem;
 }.ticketList-li{
@@ -12,9 +13,22 @@
 	height: .86rem;
 	line-height: .86rem;
 }.ticketList-li-det-p{
-	height: 1.74rem;
-	line-height: 1.74rem;
+	height: .74rem;
+	line-height: .74rem;
 	font-family: "宋体";
+	margin: .68rem 0;
+}.ticketList-li-det-ul{
+	width: 5.8rem;
+	line-height: 1rem;
+	box-shadow: .1rem .1rem 0.2rem #b7c0c1;
+	padding: 0 .2rem;
+	margin: -.68rem .2rem 0 -.2rem;
+}.ticketList-li-det-ul-li{
+	border-top: .01rem solid #cccccc;
+	font-family: "宋体";
+	padding-right: .78rem;
+}.ticketList-li-det-ul-li:first-child{
+	border: none;
 }.ticketList-li-det-bottom{
 	height: 1.1rem;
 	line-height: 1.1rem;

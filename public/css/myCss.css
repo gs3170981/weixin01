@@ -6,6 +6,16 @@
 	font-family:"微软雅黑";
 	outline: none;
 }
+.dropDown{
+	transform: rotate(180deg);
+	display: block;
+}
+.loading{
+	top: 9.41rem;
+	left: 5.42rem;
+	width: 1.58rem;
+	height: 1.58rem;
+}
 .tx-r{
 	text-align: right;
 }

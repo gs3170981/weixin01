@@ -17,7 +17,24 @@
 	font-size: .5rem;
 }.tickDetail-top-ul-tag{
 	font-size: 0.4rem;
-}.tickDetail-top-ul-det{
+	width: 2.5rem;
+}.tickDetail-top-ul-tag-span{
+	font-size: .4rem;
+}
+.tickDetail-top-ul-list{
+	width: 2.1rem;
+	line-height: 1rem;
+	box-shadow: .1rem .1rem 0.2rem #b7c0c1;
+	padding: 0 .2rem;
+	margin: .2rem 0 0 -.2rem;
+}.tickDetail-top-ul-list-li{
+	border-top: .01rem solid #cccccc;
+	font-size: .4rem;
+}.tickDetail-top-ul-list-li:first-child{
+	border: none;
+}
+
+.tickDetail-top-ul-det{
 	line-height: 1.6rem;
 }.tickDetail-top-ul-det-money{
 	font-size: .7rem;

@@ -5,64 +5,8 @@ $(function(){
 	function ready(){
 		
 //		获取ajax数据
-//		var getData=getAjax();
-		var getData={//模拟数据
-			header:{
-				img:[
-					{
-						src:'../../public/img/imgDemo.png'
-					},{
-						src:'../../public/img/imgDemo.png'
-					},{
-						src:'../../public/img/imgDemo.png'
-					},{
-						src:'../../public/img/imgDemo.png'
-					},{
-						src:'../../public/img/imgDemo.png'
-					}
-				],
-				title:'邛崃景区门票通票',
-				tag:'成人票',
-				money:260,
-				oldMoney:280,
-				welf:[0,1,2]
-			},
-			detail:[
-				{
-					title:'门票详情',
-					det:'一个手机号最多可预订9份联票。电瓶船整个浏览行程一小时，分为四段，每次15分钟。其中第三段如果客人要坐电瓶车的话也可以，但坐了电瓶车就不能坐电瓶船了（就等于直接出园了）免费政策：身高1.2M以下（含1.2M）有成年人监护的儿童入园免门票及电瓶船票；儿童6周岁（含6周岁）以下有成年人监护的儿童、70周岁以上老人、现役军人、残疾人、本市离休干部、浙江省三十年以上教龄教师凭有效证件享受门票免票。'
-				},{
-					title:'游玩须知',
-					det:'123'
-				},{
-					title:'预订须知',
-					det:'321'
-				},{
-					title:'开放时间',
-					det:'asdsadsad'
-				}
-			],
-			order:{
-				list:[
-					{
-						title:'成人票',
-						val:0
-					},{
-						title:'姓名',
-						val:'杨一'
-					},{
-						title:'手机号码',
-						val:123
-					},{
-						title:'身份证号',
-						val:456456
-					}
-				],
-				remark:'备注'
-			}
-		}
-		//数据加载
-		domDeploy(getData);
+		$('body').append("<img id='loading' class='loading xf' src='../../public/img/loading.gif' />");
+		getAjax();
 		
 		function domDeploy(obj){
 		//	public
@@ -92,11 +36,22 @@ $(function(){
 					+"<span class='left tickDetail-top-ul-det-welf-title "+welfAll[welf[i]].klass+"'>"+welfAll[welf[i]].title+"</span>"
 				+"</li>";
 			}
+			var tagList=header.tagList;
+			var tagUl="";
+			var tagUl_li="";
+			if(tagList.length>0){
+				for(var i=0;i<tagList.length;i++)
+					tagUl_li+="<li data="+tagList[i].money+" name='ticketListTagListName' class='tickDetail-top-ul-list-li'>"+tagList[i].name+"</li>";
+				tagUl+="<ul name='ticketListTagList' class='none tickDetail-top-ul-list hui bg-white clearF abs'>"
+					+tagUl_li
+				+"</ul>";
+			}
 			$('body').append('<header>'
 				+'<div id="banner" class="tickDetail-top-banner clearF bg-hui"></div>'
 				+'<ul class="tickDetail-top-ul">'
 					+'<li class="tickDetail-top-ul-title">'+header.title+'</li>'
-					+'<li class="tickDetail-top-ul-tag hui">'+header.tag+'</li>'
+					+'<li id="ticketListTagName" class="tickDetail-top-ul-tag hui clearF">'+header.tag+'</li>'
+					+tagUl
 					+'<li class="clearF tickDetail-top-ul-det">'
 						+'<ul class="left clearF">'
 							+'<li id="tickDetailMoney" class="left tickDetail-top-ul-det-money red"><span class="tickDetail-top-ul-det-money-i">￥</span>'+header.money+'</li>'
@@ -108,6 +63,28 @@ $(function(){
 					+'</li>'
 				+'</ul>'
 			+'</header>');
+			//list show
+			$('#ticketListTagName').click(function(){
+				var e=arguments.callee.caller.arguments[0] || event
+				e=window.event || e;
+				if(e.stopPropagation)e.stopPropagation();else e.cancelBubble=true;
+				$('ul[name="ticketListTagList"]').show();
+			})
+			//tag列表项绑定事件
+			$('li[name="ticketListTagListName"]').click(function(){
+				//tag值更变
+				$('#ticketListTagName').html($(this).text()+"<span class='dropDown tickDetail-top-ul-tag-span right'>▲</span>");
+				//money更变
+				$("#tickDetailMoney").html('<span class="tickDetail-top-ul-det-money-i">￥</span>'+$(this).attr('data'));
+				//订单tag值更变
+				$('#orderListType').text($(this).text());
+				//订单总额计算
+				$('#tickDetailAllMoney').text((parseFloat($(this).attr('data'))*parseInt($('#tickDetailNumber').text())).toFixed(2));
+			})
+			//list hide
+			$(document).click(function(){
+				$('ul[name="ticketListTagList"]').hide();
+			})
 			//banner添加事件
 			ticketBanner('#banner',header.img);
 		//line
@@ -141,8 +118,8 @@ $(function(){
 			var orderObj='';
 			for(var i=1;i<orderList.length;i++)
 				orderObj+="<li class='clearF tickDetail-order-li'>"
-					+"<span class='left'>"+orderList[i].title+"</span>"
-					+"<input type='text' class='right tx-r tickDetail-order-input' />"
+					+"<span id='orderListType' class='left'>"+orderList[i].title+"</span>"
+					+"<input id="+orderList[i].id+" type='text' class='right tx-r tickDetail-order-input' />"
 				+"</li>";
 			$('body').append("<ul class='tickDetail-order'>"
 				+"<li class='clearF tickDetail-order-li'>"
@@ -157,7 +134,7 @@ $(function(){
 				+"<li class='clearF'>"
 					+"<span class='left'>"+obj.order.remark+"</span>"
 				+"</li>"
-				+"<textarea class='tickDetail-order-remark' placeholder='填写备注信息'></textarea>"
+				+"<textarea id='remark' class='tickDetail-order-remark' placeholder='填写备注信息'></textarea>"
 			+"</ul>");
 		//line
 			$('body').append(line);
@@ -181,18 +158,133 @@ $(function(){
 				else if(val>1)
 					val--;
 				$(obj).text(val);
-				$('#tickDetailAllMoney').text(val*money);
+				$('#tickDetailAllMoney').text((val*money).toFixed(2));
 				$('#tickDetailNumber').text(val);
 			})
 			$("span[name='tickDetailPR']")[1].click();
+		//立即预定点击事件
+			$('.tickDetail-bottom-btn').click(function(){
+				var name=$('#name').val();//必填
+				var phone=$('#phone').val();//必填
+				var idCard=$('#idCard').val();//必填
+				var remark=$('#remark').val();
+				var number=$('#tickDetailPRNumber').text();
+				var money=$('#tickDetailAllMoney').text();
+				var is='true';
+				for(var i=0;i<1;i++){//执行一次用break跳
+					if(!name || !phone || !idCard){
+						is='您有未填写的信息请补充完整!';
+						break;
+					}else if(!validateId(idCard).success){
+						var idCardCheck=validateId(idCard);
+						is=idCardCheck.errorMessage;
+						break;
+					}else if(!validatePhone(phone).success){
+						var phoneCheck=validatePhone(phone);
+						is=phoneCheck.errorMessage;
+						break;
+					}else if(!validateName(name).success){
+						var nameCheck=validateName(name);
+						is=nameCheck.errorMessage;
+						break;
+					}
+				}
+				if(is=='true')alert('校验成功!');
+				else alert(is);
+			})
 		}
 		function getAjax(){
+			var urlJson=getUrlJson();
 			$.ajax({
-				type:"get",
-				url:"",
+				type:"post",
+				url:getAjaxUrl+"ticket/query/one.htm",
 				async:true,
+				data:{
+					id:urlJson.id
+				},
 				success:function(res){
-					return res;
+					$('#loading').hide();
+					var data=res.data;
+					var tag=decodeURIComponent(getUrlJson().type) || '通用票';
+					//数据载入层
+					var getData={
+						header:{
+							img:[],
+							title:data.name,
+							tag:tag,//解码
+							tagList:[],
+							money:data.ticket_price,
+							oldMoney:data.ticket_price,
+							welf:[0,1,2]
+						},
+						detail:[
+							{
+								title:'门票详情',
+								det:data.details
+							},{
+								title:'游玩须知',
+								det:data.play_need_know
+							},{
+								title:'预订须知',
+								det:data.buy_need_know
+							}
+//							,{
+//								title:'开放时间',
+//								det:'asdsadsad'
+//							}
+						],
+						order:{
+							list:[
+								{
+									title:tag,
+									val:0
+								},{
+									title:'姓名',
+									id:'name'
+								},{
+									title:'手机号码',
+									id:'phone'
+								},{
+									title:'身份证号',
+									id:'idCard'
+								}
+							],
+							remark:'备注'
+						}
+					}
+					//数据处理层---img列表导入
+					var imgList=data.images;
+					for(var i=0;i<imgList.length;i++)
+						getData.header.img.push({
+							src:imgList[i].thumb_medium
+						})
+					//票类型处理
+					var tag=getData.header.tag;
+					if(tag!='通用票'){
+						var ticket_type=data.ticket_type;
+						for(var i=0;i<ticket_type.length;i++)
+							if(ticket_type[i].type_name==tag){
+								getData.header.money=ticket_type[i].price;
+								break;
+							}
+						getData.header.tag+="<span class='dropDown tickDetail-top-ul-tag-span right'>▲</span>"
+					}
+					//票列表处理
+					var tagList=data.ticket_type;
+					for(var i=0;i<tagList.length;i++)
+						getData.header.tagList.push({
+							money:tagList[i].price,
+							name:tagList[i].type_name
+						})
+					domDeploy(getData);
+				},
+				timeout:4000,
+				error:function(rel,status){
+					if(status=='timeout'){
+			　　　　　  	alert("请求超时"+JSON.stringify(rel));
+			　　　　}else {
+						alert('接口请求失败'+JSON.stringify(rel));
+					}
 				}
 			});
 		}

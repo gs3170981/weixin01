@@ -64,7 +64,7 @@ function ticketBanner(append,str){
 	function ticketBannerEnd(obj){
 		var w_m=$(obj).width()/2;
 		var obj_n_c_x=Math.abs(obj_n_x);
-		console.log(obj_n_c_x);
+//		console.log(obj_n_c_x);
 		//is=0 为--
 		var cache=0,is=0;//一个标记，cache=1时，默认首张图片点击右移
 		//判断区间
