@@ -52,11 +52,13 @@ $(function(){
 		function domDeploy(obj){
 			
 			for(var i=0;i<obj.length;i++){
-				var tag="<p class='ticketList-li-det-p hui'>通用票</p>";
+				var tag="<p class='ticketList-li-det-p hui'>已售空</p>";
 				var tag_li='';
 				var ticket_type=obj[i].ticket_type;
 				var ticket_price=obj[i].ticket_price;
+				var color='background:#d2d2d2';
 				if(ticket_type.length){
+					color='';
 					tag="<p name='ticketListTagName' class='ticketList-li-det-p hui'>"+ticket_type[0].type_name+"<span class='dropDown right'>▲</span></p>";
 					for(var j=0;j<ticket_type.length;j++)
 						tag_li+="<li data="+ticket_type[j].price+" name='ticketListTagListName' class='ticketList-li-det-ul-li'>"+ticket_type[j].type_name+"</li>";
@@ -74,7 +76,7 @@ $(function(){
 							+"<li name='ticketListMoney' class='left bold blue ticketList-li-det-bottom-money'>"
 								+"<span class='no-blod'>￥</span>"+ticket_price+""
 							+"</li>"
-							+"<li data="+obj[i].id+" name='ticketListClick' class='right white ticketList-li-det-bottom-up uc-a2 tx-c'>立即预定</li>"
+							+"<li data="+obj[i].id+" name='ticketListClick' class='right white ticketList-li-det-bottom-up uc-a2 tx-c' style='"+color+"'>立即预定</li>"
 						+"</ul>"
 					+"</div>"
 				+"</li>");
@@ -102,7 +104,7 @@ $(function(){
 			$("li[name='ticketListClick']").click(function(){
 				var type=$(this).parent().parent().find('p[name="ticketListTagName"]').text();
 				type=type.substring(0,type.length-1);
-				location.href=getAddressUrl+'ticket/tickDetail/tickDetail.html?id='+$(this).attr('data')+'&type='+type;
+				if(type)location.href=getAddressUrl+'ticket/tickDetail/tickDetail.html?id='+$(this).attr('data')+'&type='+type;
 			})
 		}
 		//绑定上拉下拉
@@ -163,10 +165,13 @@ $(function(){
 				},
 				timeout:4000,
 				error:function(rel,status){
+					$('#loading').hide();
 					if(status=='timeout'){
-			　　　　　  	alert("请求超时"+JSON.stringify(rel));
+			　　　　　  	alert("请求超时,请刷新页面重试");
+						console.log(JSON.stringify(rel));
 			　　　　}else {
-						alert('接口请求失败'+JSON.stringify(rel));
+						alert('接口请求失败,请联系后台管理员');
+						console.log(JSON.stringify(rel));
 					}
 				}
 			});

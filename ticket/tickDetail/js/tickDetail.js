@@ -41,16 +41,17 @@ $(function(){
 			var tagUl_li="";
 			if(tagList.length>0){
 				for(var i=0;i<tagList.length;i++)
-					tagUl_li+="<li data="+tagList[i].money+" name='ticketListTagListName' class='tickDetail-top-ul-list-li'>"+tagList[i].name+"</li>";
+					tagUl_li+="<li typeId="+tagList[i].id+" data="+tagList[i].money+" name='ticketListTagListName' class='tickDetail-top-ul-list-li'>"+tagList[i].name+"</li>";
 				tagUl+="<ul name='ticketListTagList' class='none tickDetail-top-ul-list hui bg-white clearF abs'>"
 					+tagUl_li
 				+"</ul>";
 			}
-			$('body').append('<header>'
+			$('body').append("<div id='row' style='overflow-y:auto;'></div>");			
+			$('#row').append('<header>'
 				+'<div id="banner" class="tickDetail-top-banner clearF bg-hui"></div>'
 				+'<ul class="tickDetail-top-ul">'
-					+'<li class="tickDetail-top-ul-title">'+header.title+'</li>'
-					+'<li id="ticketListTagName" class="tickDetail-top-ul-tag hui clearF">'+header.tag+'</li>'
+					+'<li id="ticketName" class="tickDetail-top-ul-title">'+header.title+'</li>'
+					+'<li id="ticketListTagName" data='+header.id+' class="tickDetail-top-ul-tag hui clearF">'+header.tag+'</li>'
 					+tagUl
 					+'<li class="clearF tickDetail-top-ul-det">'
 						+'<ul class="left clearF">'
@@ -72,6 +73,8 @@ $(function(){
 			})
 			//tag列表项绑定事件
 			$('li[name="ticketListTagListName"]').click(function(){
+				//typeId更变
+				$('#ticketListTagName').attr('data',$(this).attr('typeId'));
 				//tag值更变
 				$('#ticketListTagName').html($(this).text()+"<span class='dropDown tickDetail-top-ul-tag-span right'>▲</span>");
 				//money更变
@@ -88,13 +91,13 @@ $(function(){
 			//banner添加事件
 			ticketBanner('#banner',header.img);
 		//line
-			$('body').append(line);
+			$('#row').append(line);
 		//detail
 			var detObj='';
 			var det=obj.detail
 			for(var i=0;i<det.length;i++)
 				detObj+="<a name='tickDetList' class='left tickDetail-det-list-a'>"+det[i].title+"</a>";
-			$('body').append("<ul>"
+			$('#row').append("<ul>"
 				+"<li class='clearF tickDetail-det-list'>"
 					+detObj
 				+"</li>"
@@ -112,18 +115,18 @@ $(function(){
 			})
 			$("a[name='tickDetList']")[0].click();
 		//line
-			$('body').append(line);
+			$('#row').append(line);
 		//order
 			var orderList=obj.order.list;
 			var orderObj='';
 			for(var i=1;i<orderList.length;i++)
 				orderObj+="<li class='clearF tickDetail-order-li'>"
-					+"<span id='orderListType' class='left'>"+orderList[i].title+"</span>"
+					+"<span class='left'>"+orderList[i].title+"</span>"
 					+"<input id="+orderList[i].id+" type='text' class='right tx-r tickDetail-order-input' />"
 				+"</li>";
-			$('body').append("<ul class='tickDetail-order'>"
+			$('#row').append("<ul class='tickDetail-order'>"
 				+"<li class='clearF tickDetail-order-li'>"
-					+"<span class='left'>"+orderList[0].title+"</span>"
+					+"<span data="+orderList[0].img_logo+" id='orderListType' class='left'>"+orderList[0].title+"</span>"
 					+"<div class='right tx-c tickDetail-order-det'>"
 						+"<span name='tickDetailPR' class='tickDetail-order-plus left'>-</span>"
 						+"<span id='tickDetailPRNumber' class='tickDetail-order-val left'>"+orderList[0].val+"</span>"
@@ -137,15 +140,15 @@ $(function(){
 				+"<textarea id='remark' class='tickDetail-order-remark' placeholder='填写备注信息'></textarea>"
 			+"</ul>");
 		//line
-			$('body').append(line);
+			$('#row').append(line);
 		//footer
-			$('body').append("<footer class='tickDetail-bottom'>"
+			$('#row').append("<footer class='tickDetail-bottom'>"
 				+"<ul class='tickDetail-bottom-det clearF'>"
 					+"<li class='left tickDetail-bottom-det-title'>订单总额</li>"
 					+"<li class='left red'>￥<span id='tickDetailAllMoney' class='tickDetail-bottom-det-money'></span></li>"
 					+"<li class='left hui tickDetail-bottom-det-number'>X<span id='tickDetailNumber'>0</span></li>"
 				+"</ul>"
-				+"<a class='tx-c uc-a2 white tickDetail-bottom-btn'>立即预定</a>"
+				+"<a class='tx-c uc-a2 white tickDetail-bottom-btn'>提交订单</a>"
 			+"</footer>");
 		//票价点击事件---要footer加载完才可
 			$("span[name='tickDetailPR']").click(function(){
@@ -170,6 +173,12 @@ $(function(){
 				var remark=$('#remark').val();
 				var number=$('#tickDetailPRNumber').text();
 				var money=$('#tickDetailAllMoney').text();
+				var id=$('#ticketListTagName').attr('data');
+				var type=$('#ticketListTagName').text();
+				var idName=$('#ticketName').text();
+				type=type.substring(0,type.length-1);
+				idName+='('+type+')';
+				var img=$('#orderListType').attr('data');
 				var is='true';
 				for(var i=0;i<1;i++){//执行一次用break跳
 					if(!name || !phone || !idCard){
@@ -189,7 +198,99 @@ $(function(){
 						break;
 					}
 				}
-				if(is=='true')alert('校验成功!');
+				if(is=='true'){
+					
+//					//获取微信支付接口
+//					$.ajax({
+//						type:"post",
+//						url:getAjaxUrl+"macro/wxpay.htm",
+//						async:true,
+//						data:{
+//							order_no:"T52010265125256",
+//							openid:"wxkdfjkdjkdljsfkdjfkdljfkldjf",
+//							trade_type:"JSAPI"
+//						},
+//						success:function(res){
+//							
+//						},
+//						timeout:4000,
+//						error:function(rel,status){
+//							if(status=='timeout'){
+//					　　　　　  	alert("请求超时");
+//								console.log(JSON.stringify(rel));
+//					　　　　}else {
+//								alert('接口请求失败');
+//								console.log(JSON.stringify(rel));
+//							}
+//						}
+//					});
+					
+					
+					
+					
+//					//微信支付接口
+//					function onBridgeReady(){
+//					   WeixinJSBridge.invoke(
+//					       'getBrandWCPayRequest', {
+//					           "appId":"wx2421b1c4370ec43b",     //公众号名称，由商户传入     
+//					           "timeStamp":"1395712654",         //时间戳，自1970年以来的秒数     
+//					           "nonceStr":"e61463f8efa94090b1f366cccfbbb444", //随机串     
+//					           "package":"prepay_id=u802345jgfjsdfgsdg888",     
+//					           "signType":"MD5",         //微信签名方式：     
+//					           "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名 
+//					       	},
+//					       	function(res){     
+//					           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+//					           	
+//				           		}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+//					       	}
+//					   );
+//					}
+//					if (typeof WeixinJSBridge == "undefined"){
+//					   if( document.addEventListener ){
+//					       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+//					   }else if (document.attachEvent){
+//					       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+//					       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+//					   }
+//					}else{
+//					   onBridgeReady();
+//					}
+					
+					
+					//储存数据库
+					$.ajax({
+						type:"post",
+						url:getAjaxUrl+"macro/order/create.htm",
+						data:{
+							product_id:id,
+							product_name:idName,
+							product_type:"ticket",
+							product_num:number,
+							product_img:img,
+							link_name:name,
+							link_tel:phone,
+							link_id_card:idCard,
+							remarks:remark
+						},
+						async:true,
+						success:function(rel){
+							alert('预订成功!');
+							//do something...
+						},
+						timeout:4000,
+						error:function(rel,status){
+							$('#loading').hide();
+							if(status=='timeout'){
+					　　　　　  	alert("请求超时,请刷新页面重试");
+								console.log(JSON.stringify(rel));
+					　　　　}else {
+								alert('接口请求失败,请联系后台管理员');
+								console.log(JSON.stringify(rel));
+							}
+						}
+					});
+				}
 				else alert(is);
 			})
 		}
@@ -212,6 +313,7 @@ $(function(){
 							img:[],
 							title:data.name,
 							tag:tag,//解码
+							id:'',//获取tag列表后,添加id值
 							tagList:[],
 							money:data.ticket_price,
 							oldMoney:data.ticket_price,
@@ -227,8 +329,8 @@ $(function(){
 							},{
 								title:'预订须知',
 								det:data.buy_need_know
-							}
-//							,{
+							},
+//							{
 //								title:'开放时间',
 //								det:'asdsadsad'
 //							}
@@ -237,7 +339,8 @@ $(function(){
 							list:[
 								{
 									title:tag,
-									val:0
+									val:0,
+									img_logo:data.logo_image
 								},{
 									title:'姓名',
 									id:'name'
@@ -271,19 +374,30 @@ $(function(){
 					}
 					//票列表处理
 					var tagList=data.ticket_type;
-					for(var i=0;i<tagList.length;i++)
-						getData.header.tagList.push({
-							money:tagList[i].price,
-							name:tagList[i].type_name
-						})
+					if(tagList){
+						for(var i=0;i<tagList.length;i++)
+							getData.header.tagList.push({
+								money:tagList[i].price,
+								name:tagList[i].type_name,
+								id:tagList[i].id
+							})
+						var tagListObj=getData.header.tagList;
+						for(var i=0;i<tagListObj.length;i++)
+							if(tagListObj[i].name==tag)
+								break;
+						getData.header.id=tagList[i].id;
+					}
+						
 					domDeploy(getData);
 				},
 				timeout:4000,
 				error:function(rel,status){
 					if(status=='timeout'){
-			　　　　　  	alert("请求超时"+JSON.stringify(rel));
+			　　　　　  	alert("请求超时");
+						console.log(JSON.stringify(rel));
 			　　　　}else {
-						alert('接口请求失败'+JSON.stringify(rel));
+						alert('接口请求失败');
+						console.log(JSON.stringify(rel));
 					}
 				}
 			});

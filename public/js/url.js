@@ -1,5 +1,7 @@
-var getAjaxUrl='http://192.168.11.124:8012/';
-var getAddressUrl='http://192.168.11.124:8012/resources/';
+//var getAjaxUrl='http://192.168.11.124:8012/';
+//var getAddressUrl='http://192.168.11.124:8012/resources/';
+var getAjaxUrl='http://'+window.location.host+'/';
+var getAddressUrl='http://'+window.location.host+'/resources/';
 function getUrlJson(){
 	var url=window.location.href;
 	var dataId=url.substring(url.lastIndexOf('?')+1,url.length);

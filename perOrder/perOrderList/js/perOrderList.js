@@ -5,7 +5,7 @@ $(function(){
 	function ready(){
 		
 //		获取ajax数据
-//		var getData=getAjax();
+		var getData1=getAjax();
 		var getData={
 			title:'我的订单',
 			list:[
@@ -105,14 +105,52 @@ $(function(){
          	}
       	})
 		function getAjax(){
+			
 			$.ajax({
-				type:"get",
-				url:"",
+				type:"post",
+				url:getAjaxUrl+"macro/query/user/order.htm",
 				async:true,
-				success:function(res){
-					return res;
+				success:function(rel){
+					
+				},
+				error:function(rel,status){
+					$('#loading').hide();
+					if(status=='timeout'){
+			　　　　　  	alert("请求超时,请刷新页面重试");
+						console.log(JSON.stringify(rel));
+			　　　　}else {
+						alert('接口请求失败,请联系后台管理员');
+						console.log(JSON.stringify(rel));
+					}
 				}
 			});
+			
+			
+			
+			
+//			$.ajax({
+//				type:"post",
+//				url:getAjaxUrl+"macro/user/self.htm",
+//				async:true,
+//				success:function(res){
+//					//用户查询到信息后才可获取列表
+////					$.ajax({
+////						type:"post",
+////						url:"",
+////						async:true
+////					});
+//				},
+//				timeout:4000,
+//				error:function(rel,status){
+//					if(status=='timeout'){
+//			　　　　　  	alert("请求超时");
+//						console.log(JSON.stringify(rel));
+//			　　　　}else {
+//						alert('接口请求失败');
+//						console.log(JSON.stringify(rel));
+//					}
+//				}
+//			});
 		}
 	}
 })

@@ -14,6 +14,8 @@ function ticketBanner(append,str){
 	var ticketBannerSpot=$("span[name='ticketBannerSpot']");
 	$(ticketBannerSpot[0]).text('●');
 	$('#ticketBannerUl').width($(append).width()*str.length);
+	var ticketBannerIs=false;//start与end判断为每次起始必须动画完成后才能再次点击
+	var tickNumber=0;//单线程，禁止双指触摸bug
 	//监听事件
 	$(append).on('touchstart',function(){
 		ticketBannerStart(event,$(append));
@@ -26,8 +28,12 @@ function ticketBanner(append,str){
 	});
 	var e_x=0,obj_l=0,e_n_x_c=0;e_arr=[],obj_n_x=0;
 	var timer;
+	var response;
+	var responseTimer=0;
 	//初始化translateX各个分段
 	ticketBannerArr(str,append);
+	
+	
 	function ticketBannerArr(obj,append){
 		var w=$(append).width(),c=-w;
 //		if(obj.length<1)return false;
@@ -38,21 +44,37 @@ function ticketBanner(append,str){
 			})
 			c+=w;
 		}
+		
 	}
 	function ticketBannerStart(event,obj){
-		//初始化
-		e_x=event.touches[0].clientX;
-		//获取当前translateX值
-		obj_n_x=getTranslateX();
-		clearInterval(timer);
+
+		tickNumber++;
+		if(tickNumber==1){
+			
+//			if(ticketBannerIs==false){
+//				ticketBannerIs=true;
+				document.querySelector('body').addEventListener('touchstart', function (ev) {
+				    event.preventDefault();
+				});
+				//初始化
+				e_x=event.touches[0].clientX;
+				//获取当前translateX值
+				obj_n_x=getTranslateX();
+//			}
+		
+		}
 	}
 	function ticketBannerMove(event,obj){
-		var obj_n_l=$(obj).css('margin-left');
-		var e_n_x=event.touches[0].clientX;//now_X
-		//移动偏差
-		e_n_x_c=e_n_x-e_x;
-		$('#ticketBannerUl').css('transform','translateX('+(obj_n_x+e_n_x_c)+'px)');
-
+		if(tickNumber==1){
+//			if(ticketBannerIs==false){
+				var obj_n_l=$(obj).css('margin-left');
+				var e_n_x=event.touches[0].clientX;//now_X
+				//移动偏差
+				e_n_x_c=e_n_x-e_x;
+				$('#ticketBannerUl').css('transform','translateX('+(obj_n_x+e_n_x_c)+'px)');
+//			}
+			
+		}
 	}
 	function ticketBannerSection(index){
 //		console.log(index);
@@ -62,50 +84,55 @@ function ticketBanner(append,str){
 		return 0;//这里需要对最左边的null处理
 	}
 	function ticketBannerEnd(obj){
-		var w_m=$(obj).width()/2;
-		var obj_n_c_x=Math.abs(obj_n_x);
-//		console.log(obj_n_c_x);
-		//is=0 为--
-		var cache=0,is=0;//一个标记，cache=1时，默认首张图片点击右移
-		//判断区间
-		var index=ticketBannerSection(obj_n_c_x);
 
-//		console.log(index);
-
-		if(e_n_x_c>=w_m && e_n_x_c>0){//left
-			console.log('left');
-			cache=index-1;
-			if(cache==-1){
-				cache=0;//防止左溢出
-				is=0;
-			}else is=1;
-//			console.log(index);
-		}else if(Math.abs(e_n_x_c)>=w_m && e_n_x_c<0){//right
-			cache=index+1;
-			if(cache==e_arr.length)	{//防止右溢出
+//		if(ticketBannerIs==true){
+			console.log(ticketBannerIs);
+			ticketBannerIs=true;
+			var w_m=$(obj).width()/2;
+			var obj_n_c_x=Math.abs(obj_n_x);
+	//		console.log(obj_n_c_x);
+			//is=0 为--
+			var cache=0,is=0;//一个标记，cache=1时，默认首张图片点击右移
+			//判断区间
+			var index=ticketBannerSection(obj_n_c_x);
+	
+	//		console.log(index);
+	
+			if(e_n_x_c>=w_m && e_n_x_c>0){//left
+				console.log('left');
+				cache=index-1;
+				if(cache==-1){
+					cache=0;//防止左溢出
+					is=0;
+				}else is=1;
+	//			console.log(index);
+			}else if(Math.abs(e_n_x_c)>=w_m && e_n_x_c<0){//right
+				cache=index+1;
+				if(cache==e_arr.length)	{//防止右溢出
+					cache=index;
+					is=1;
+				}else is=0;
+				console.log('right');
+			}else if(e_n_x_c>0){
+				cache=index;
+				console.log('弹回left');
+			}else if(e_n_x_c<0){
 				cache=index;
 				is=1;
-			}else is=0;
-			console.log('right');
-		}else if(e_n_x_c>0){
-			cache=index;
-			console.log('弹回left');
-		}else if(e_n_x_c<0){
-			cache=index;
-			is=1;
-			console.log('弹回right');
-		}
-		if(obj_n_x==getTranslateX()) {
-			cache=index+1;
-			if(cache==e_arr.length)	{//返回首
-				cache=0;
-				is=1;
-			}else is=0;
-			console.log('单击');
-		}
-		$(ticketBannerSpot).text('○');
-		$(ticketBannerSpot[cache]).text('●');
-		getTranslateXMove(e_arr[cache],is);
+				console.log('弹回right');
+			}
+			if(obj_n_x==getTranslateX()) {
+				cache=index+1;
+				if(cache==e_arr.length)	{//返回首
+					cache=0;
+					is=1;
+				}else is=0;
+				console.log('单击');
+			}
+			$(ticketBannerSpot).text('○');
+			$(ticketBannerSpot[cache]).text('●');
+			getTranslateXMove(e_arr[cache],is);
+//		}
 	}
 	function getTranslateXMove(index,is){
 		var nowX=getTranslateX();
@@ -117,10 +144,14 @@ function ticketBanner(append,str){
 				var c=nowX+n;
 				if(-index.start==c){
 					$('#ticketBannerUl').css('transform','translateX('+c+'px)');
+					tickNumber=0;
+//					responseTimer=true;
+//					ticketBannerIs=false;
 					clearInterval(timer);
 					return false;
 				}
 				$('#ticketBannerUl').css('transform','translateX('+c+'px)');
+
 			}
 		})
 	}
